@@ -30,7 +30,7 @@ public class ArrayList<T> {
 
             elements = newArray;
         }
-	}
+    }
 
     public ArrayList() {
         capacity = 10;
@@ -89,15 +89,15 @@ public class ArrayList<T> {
     }
 
 	@Override
-	public String toString() {
-	    String ret = "[";
+    public String toString() {
+        String ret = "[";
 
-		for(int i=0; i<size-1; i++) {
-		    ret = ret + elements[i].toString() + ",";
-		}
+        for(int i=0; i<size-1; i++) {
+            ret = ret + elements[i].toString() + ",";
+        }
 
-		ret = ret + elements[size-1].toString() + "]";
+        ret = ret + elements[size-1].toString() + "]";
 
-		return ret;
-	}
+        return ret;
+    }
 }

@@ -88,7 +88,7 @@ public class ArrayList<T> {
         return -1;
     }
 
-	@Override
+    @Override
     public String toString() {
         String ret = "[";
 

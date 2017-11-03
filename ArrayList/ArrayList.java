@@ -1,4 +1,4 @@
-package narlinen.dsa.arrayList;
+package narlinen.dsa.arraylist;
 
 public class ArrayList<T> {
     
@@ -90,6 +90,9 @@ public class ArrayList<T> {
 
     @Override
     public String toString() {
+        if(size == 0)
+			return "empty list";
+
         String ret = "[";
 
         for(int i=0; i<size-1; i++) {

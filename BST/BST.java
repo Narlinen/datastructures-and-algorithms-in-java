@@ -1,11 +1,13 @@
-public class BST<K extends Compareable<K>,V> {
+import java.util.LinkedList;
+
+public class BST<K extends Comparable<K>,V> {
     private class Node {
-	    K key
-		T value;
+	    K key;
+		V value;
 		Node left;
 		Node right;
 
-		public Node(K key,T value) {
+		public Node(K key,V value) {
 		    this.key = key;
 			this.value = value;
 			this.left = null;
@@ -21,7 +23,7 @@ public class BST<K extends Compareable<K>,V> {
 	}
 
 	private Node root;
-	int count;
+	private int count;
 
 	public BST() {
 	    root = null;
@@ -32,7 +34,7 @@ public class BST<K extends Compareable<K>,V> {
 	    return count;
 	}
 
-	public empty() {
+	public boolean empty() {
 	    return count == 0;
 	}
 
@@ -49,7 +51,8 @@ public class BST<K extends Compareable<K>,V> {
 	}
 
 	public V search(K key) {
-	    return search(root,key);
+	    Node node = search(root,key);
+		return node == null ? null : node.value;
 	}
 
 	public void preOrder() {
@@ -83,22 +86,22 @@ public class BST<K extends Compareable<K>,V> {
 
 	public K minimum() {
 	    Node minNode =  minimum(root);
-		return minNode.key();
+		return minNode.key;
 	}
 
 	public K maximum() {
 	    Node maxNode = maximum(root);
-		return maxNode.key();
+		return maxNode.key;
 	}
 
 	public void removeMin() {
 		if(root != null)
-	        return removeMin(root);
+	        root = removeMin(root);
 	}
 
 	public void removeMax() {
 	    if(root != null)
-		    return removeMax(root);
+		    root = removeMax(root);
 	}
 
 	public Node predecessor(K key) {
@@ -116,7 +119,7 @@ public class BST<K extends Compareable<K>,V> {
 		return preNode == null ? null : preNode;
 	}
 
-	public Key successor(K key) {
+	public Node successor(K key) {
 	    Node node = search(root,key);
 
 		if(node == null) {
@@ -124,11 +127,11 @@ public class BST<K extends Compareable<K>,V> {
 		}
 
 		if(node.right != null) {
-		    return minimum(node.right).key;
+		    return minimum(node.right);
 		}
 
 		Node sucNode = successorFromAncestor(root,key);
-		return sucNode == null ? null : sucNode.key;
+		return sucNode == null ? null : sucNode;
 	}
 
 	private Node insert(Node node,K key,V value) {
@@ -153,11 +156,30 @@ public class BST<K extends Compareable<K>,V> {
 			return null;
 		}
 
-		int compareResult = key.compareTo(node.key);
+		if(key.compareTo(node.key) == 0) {
 
-		if(compareResult == 0) {
-		
-		} else if(compareResult < 0) {
+		    if(node.left == null) {
+			    Node rightNode = node.right;
+                node.right = null;
+                count--;
+				return rightNode;
+			}
+
+			if(node.right == null) {
+			    Node leftNode = node.left;
+				node.left = null;
+				count--;
+				return leftNode;
+			}
+            
+			Node successor = new Node(minimum(node.right));
+
+			successor.right = removeMin(node.right);
+			successor.left = node.left;
+
+			return successor;
+
+		} else if(key.compareTo(node.key) < 0) {
 		    node.left = remove(node.left,key);
 			return node;
 		} else {
@@ -180,13 +202,13 @@ public class BST<K extends Compareable<K>,V> {
 		}
 	}
 
-	private V search(Node node,K key) {
+	private Node search(Node node,K key) {
 	    if(node == null) {
 		    return null;
 		}
 
 		if(key.compareTo(node.key) == 0) {
-		    return node.value;
+		    return node;
 		} else if(key.compareTo(node.key) < 0) {
 		    return search(node.left,key);
 		} else {
@@ -206,7 +228,7 @@ public class BST<K extends Compareable<K>,V> {
 
 	private void inOrder(Node node) {
 	    if(node == null) {
-		    return null;
+		    return;
 		}
 
 		inOrder(node.left);
@@ -216,7 +238,7 @@ public class BST<K extends Compareable<K>,V> {
 
 	private void postOrder(Node node) {
 	    if(node == null) {
-		    return null;
+		    return;
 		}
 
 		postOrder(node.left);
@@ -272,7 +294,7 @@ public class BST<K extends Compareable<K>,V> {
 		return node;
 	}
 
-	private Node precessorFromAncestor(Node node,Key key) {
+	private Node predecessorFromAncestor(Node node,K key) {
 	    if(key.compareTo(node.key) == 0) {
 		    return null;
 		}
@@ -280,9 +302,9 @@ public class BST<K extends Compareable<K>,V> {
 		Node maxNode;
 
 		if(key.compareTo(node.key) < 0) {
-		    return precessorFromAncestor(node.left,key);
+		    return predecessorFromAncestor(node.left,key);
 		} else {
-		    maxNode = precessorFromAncestor(node.right,key);
+		    maxNode = predecessorFromAncestor(node.right,key);
 			if(maxNode != null) {
 			    return maxNode; 
 			} else {
@@ -291,11 +313,12 @@ public class BST<K extends Compareable<K>,V> {
 		}
 	}
 
-	private Node successorFromAncestor(Node node,Key key) {
+	private Node successorFromAncestor(Node node,K key) {
 	    if(key.compareTo(node.key) == 0) {
 		    return null;
 		}
 
+		Node minNode;
 		if(key.compareTo(node.key) > 0) {
 		    return successorFromAncestor(node.right,key);
 		} else {

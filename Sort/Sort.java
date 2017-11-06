@@ -1,6 +1,20 @@
 import java.util.Comparator;
 
 public class Sort {
+    
+    public static <T> void bubbleSort(T[] arr,Comparator<T> cmp) {
+	    int n = arr.length;
+
+		for(int new_n=0; n>0; n=new_n) {
+			new_n = 0;
+		    for(int i=1; i<n; i++) {
+		        if(cmp.compare(arr[i-1],arr[i]) > 0) {
+			        swap(arr,i,i-1);
+				    new_n = i;
+			    }
+		    }
+		}
+	}
 
     public static <T> void selectionSort(T[] arr,Comparator<T> cmp) {
 	    for(int i=0; i<arr.length; i++) {

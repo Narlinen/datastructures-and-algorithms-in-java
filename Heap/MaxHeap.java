@@ -1,14 +1,16 @@
-public class MaxHeap<Item extends Comparable> {
+public class MaxHeap<Item extends Comparable<Item>> {
     private Item[] data;
 	private int count;
 
+	@SuppressWarnings("unchecked")
 	public MaxHeap(int n) {
-	    data = (Item)new Object[n+1];
+	    data = (Item[])new Comparable[n+1];
 		count = 0;
 	}
 
+	@SuppressWarnings("unchecked")
     public MaxHeap(Item[] arr) {
-	    data = (Item)new Object[arr.length+1];
+	    data = (Item[])new Comparable[arr.length+1];
 		count = arr.length;
 
 		for(int i=0; i<arr.length; i++) {
@@ -39,6 +41,8 @@ public class MaxHeap<Item extends Comparable> {
 		swap(data,1,count--);
 
 		shiftDown(1);
+
+		return ret;
 	}
 
 	public int size() {
@@ -57,12 +61,24 @@ public class MaxHeap<Item extends Comparable> {
 	}
 
 	private void shiftDown(int v) {
-	    while(v*2 <= count &&) {
-		    int k = j*2;
+	    while(v*2 <= count) {
+		    int k = v*2;
 			if(k+1 <= count && data[k].compareTo(data[k+1]) < 0)
 				k++;
 
-			if(data[k].compareTo()
+			if(data[k].compareTo(data[v]) <= 0) {
+			    return;
+			}
+
+			swap(data,k,v);
+
+			v = k;
 		}
 	}
+
+	private void swap(Item[] arr,int i,int j) {
+	    Item temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	} 
 }

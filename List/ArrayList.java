@@ -82,7 +82,7 @@ public class ArrayList<T> {
     public int search(T e) {
         for(int i=0; i<size; i++) {
             if(elements[i] == e) {
-            	return i;
+                return i;
             }
         }
         return -1;
@@ -91,7 +91,7 @@ public class ArrayList<T> {
     @Override
     public String toString() {
         if(size == 0)
-			return "empty list";
+            return "empty list";
 
         String ret = "[";
 

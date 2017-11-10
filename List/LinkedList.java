@@ -75,8 +75,9 @@ public class LinkedList<T> {
 
     @Override
     public String toString() {
-        if(size == 0)
+        if(size == 0) {
             return "empty list";
+        }
 
         String ret = "";
 

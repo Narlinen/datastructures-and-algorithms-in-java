@@ -31,8 +31,9 @@ public class MaxHeap<Item extends Comparable<Item>> {
     }
 
     public Item getMax() {
-        if(count == 0)
+        if(count == 0) {
             return null;
+        }
 
         return data[1];
     }

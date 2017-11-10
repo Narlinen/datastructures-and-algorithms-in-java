@@ -95,13 +95,15 @@ public class BST<K extends Comparable<K>,V> {
     }
 
     public void removeMin() {
-        if(root != null)
+        if(root != null) {
             root = removeMin(root);
+        }
     }
 
     public void removeMax() {
-        if(root != null)
+        if(root != null) {
             root = removeMax(root);
+        }
     }
 
     public Node predecessor(K key) {

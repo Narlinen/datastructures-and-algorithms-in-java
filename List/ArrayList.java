@@ -16,8 +16,8 @@ public class ArrayList<T> {
             }
         
             elements = newArray;
-            }
         }
+    }
 
     private void shrink() {
         if(capacity > size *2) {
@@ -90,8 +90,9 @@ public class ArrayList<T> {
 
     @Override
     public String toString() {
-        if(size == 0)
+        if(size == 0) {
             return "empty list";
+        }
 
         String ret = "[";
 

@@ -107,6 +107,51 @@ public class Sort {
         }
     }
 
+	public static <T extends Comparable<T>> void quickSort(T[] arr,int left,int right) {
+	    if(left >= right) {
+            return;
+		}
+
+        int p = partitionDouble(arr,left,right);
+        quickSort(arr,left,p-1);
+        quickSort(arr,p+1,right);
+	}
+
+    private static <T extends Comparable<T>> int partitionSingle(T[] arr,int left,int right) {
+        T v = arr[left];
+
+        int last = left; //last为最后一个比v小的值的下标
+        for(int judge=left+1; judge<=right; judge++) {
+            if(arr[judge].compareTo(v) < 0) {
+                last++;
+                swap(arr,last,judge);
+            }
+        }
+
+        swap(arr,left,last);
+
+        return last;
+    }
+
+    private static <T extends Comparable<T>> int partitionDouble(T[] arr,int left,int right) {
+        T v = arr[left];
+
+        int i=left+1,j=right;
+
+        while(true) {
+            while(i<=right  && arr[i].compareTo(v) < 0) i++;
+            while(j>=left+1 && arr[j].compareTo(v) > 0) j--;
+
+            if(i > j) break;
+
+            swap(arr,i++,j--);
+        }
+
+        swap(arr,left,j);
+
+        return j;
+    }
+
     private static void swap(Object[] arr,int a,int b) {
         Object temp = arr[a];
         arr[a] = arr[b];

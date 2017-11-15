@@ -107,33 +107,43 @@ public class Sort {
         }
     }
 
-	public static <T extends Comparable<T>> void quickSort(T[] arr,int left,int right) {
+	public static <T extends Comparable<T>> void quickSortOneWay(T[] arr,int left,int right) {
 	    if(left >= right) {
             return;
 		}
 
-        int p = partitionDouble(arr,left,right);
-        quickSort(arr,left,p-1);
-        quickSort(arr,p+1,right);
+        int p = partitionOneWay(arr,left,right);
+        quickSortOneWay(arr,left,p-1);
+        quickSortOneWay(arr,p+1,right);
 	}
 
-    private static <T extends Comparable<T>> int partitionSingle(T[] arr,int left,int right) {
+    private static <T extends Comparable<T>> int partitionOneWay(T[] arr,int left,int right) {
         T v = arr[left];
 
-        int last = left; //last为最后一个比v小的值的下标
-        for(int judge=left+1; judge<=right; judge++) {
+        int last = left;
+        for(int judge = left+1; judge <= right; judge++) {
             if(arr[judge].compareTo(v) < 0) {
                 last++;
                 swap(arr,last,judge);
             }
         }
 
-        swap(arr,left,last);
+        swap(arr,last,left);
 
         return last;
     }
 
-    private static <T extends Comparable<T>> int partitionDouble(T[] arr,int left,int right) {
+    public static <T extends Comparable<T>> void quickSortTwoWay(T[] arr,int left,int right) {
+        if(left >= right) {
+            return;
+        }
+
+        int p = partitionTwoWay(arr,left,right);
+        quickSortTwoWay(arr,left,p-1);
+        quickSortTwoWay(arr,p+1,right);
+    }
+
+    private static <T extends Comparable<T>> int partitionTwoWay(T[] arr,int left,int right) {
         T v = arr[left];
 
         int i=left+1,j=right;
@@ -150,6 +160,77 @@ public class Sort {
         swap(arr,left,j);
 
         return j;
+    }
+
+    public static <T extends Comparable<T>> void quickSortThreeWay(T[] arr,int left,int right) {
+        if(left >= right) {
+            return;
+        }
+
+        T v = arr[left];
+
+        int lt = left;
+        int gt = right+1;
+        int judge = left+1;
+        while(judge < gt) {
+            if(arr[judge].compareTo(v) > 0) {
+                swap(arr,judge,--gt);
+            } else if(arr[judge].compareTo(v) < 0) {
+                swap(arr,judge++,++lt);
+            } else {
+                judge++;
+            }
+        }
+
+        swap(arr,left,lt);
+        quickSortThreeWay(arr,left,lt-1);
+        quickSortThreeWay(arr,gt,right);
+    }
+
+    public static <T extends Integer> void bucketSort(Integer[] arr,int max) {
+        Integer[] bucket = new Integer[max+1];
+
+        for(int i=0; i<max+1; i++) {
+            bucket[i] = 0;
+        }
+
+        for(int i=0; i<arr.length; i++) {
+            bucket[arr[i]]++;
+        }
+
+        for(int i=0,j=0; i<max+1 && j<arr.length; i++) {
+            while(bucket[i] != 0) {
+                arr[j++] = i;
+                bucket[i]--;
+            }
+        }
+    }
+
+    public static <T extends Integer> void countingSort(Integer[] arr,int max) {
+        Integer[] countingArr = new Integer[max+1];
+        Integer[] tempArr = new Integer[max+1];
+
+        for(int i=0; i<max+1; i++) {
+            countingArr[i] = 0;
+            tempArr[i] = 0;
+        }
+
+        for(int i=0; i<arr.length; i++) {
+            countingArr[arr[i]]++;
+        }
+
+        for(int i=1; i<max+1; i++) {
+            countingArr[i] += countingArr[i-1];
+        }
+
+        for(int i=arr.length-1; i>=0; i--) {
+            tempArr[countingArr[arr[i]]-1] = arr[i];
+            countingArr[arr[i]]--;
+        }
+
+        for(int i=0; i<arr.length; i++) {
+            arr[i] = tempArr[i];
+        }
     }
 
     private static void swap(Object[] arr,int a,int b) {
